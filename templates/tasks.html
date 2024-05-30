@@ -1,0 +1,70 @@
+
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Todo List</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+      {% comment %} <link rel="stylesheet" href="{% static 'style.css' %}"> {% endcomment %}
+   </head>
+   <body>
+      <div class="container mt-5 col-lg-6">
+         <form class="row justify-content-center align-items-center main-row" method="POST">
+            {% csrf_token %}
+            <div class="col shadow main-col bg-white">
+               {% if messages %}
+               {% for message in messages %}
+               <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+               </div>
+               {% endfor %}
+               {% endif %}
+               <div class="row bg-primary text-white">
+                  <div class="col  p-2">
+                     <h4>{{ request.user }}</h4>
+                  </div>
+               </div>
+               <div class="row justify-content-between text-white mt-2 p-2">
+                  <div class="form-group flex-fill mb-2">
+                     <input name="task_name" id="todo-input1" type="text" class="form-control mt-3" value="" placeholder="Enter Task">
+                     <input name="end_date" id="todo-input2" type="date" class="form-control mt-3" value="" placeholder="Select end date">
+                  </div>
+                  <button type="submit" class="btn btn-primary mb-2 ml-2">Add todo</button>
+               </div>
+            </div>
+         </form>
+      </div>
+      <div class="container col-lg-6 mt-5">
+         {% if data %}
+         <table class="table">
+            <thead class="border-4">
+               <tr>
+                  <th class="border-4" scope="col"> Task Id</th>
+                  <th class="border-4" scope="col">Task Name</th>
+                  <th class="border-4" scope="col">Task status</th>
+                  <th class="border-4" scope="col">Task start date </th>
+                  <th class="border-4" scope="col">Task End Date</th>
+               </tr>
+            </thead>
+            <tbody class="border-4">
+               {% for task in data %}
+               <tr>
+                  <th class="border-4" scope="row">{{ forloop.counter }}</th>
+                  <td class="border-4">{{ task.task }}</td>
+                  <td class="border-4">{{ task.status }}</td>
+                  <td class="border-4">{{ task.start_date }}</td>
+                  <td class="border-4">{{ task.target_date }}</td>
+                  <td><a class="btn btn-success mx-2" href="{% url 'update' %}" target="_blank">Edit</a></td>
+                  <td><a href="{% url 'deleteView' task.id %}" class="btn btn-danger">Delete</a></td>
+               </tr>
+               {% endfor %}
+            </tbody>
+         </table>
+         {% endif %}
+      </div>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+   </body>
+</html>
